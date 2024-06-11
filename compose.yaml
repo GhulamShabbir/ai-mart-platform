@@ -2,12 +2,24 @@ version: '3.8'
 name: template01
 services:
   
-  product_service:
+  user_service:
     build:
-      context: ./todo
+      context: ./user_service
       dockerfile: Dockerfile.dev
     volumes:
-      - ./todo:/code  # Sync local development directory with the container
+      - ./user_service:/code  # Sync local development directory with the container
+    depends_on:
+        - postgres_db
+        - broker
+    ports:
+      - "8004:8000"  # Expose container port 8000 to host port 8000 
+
+  product_service:
+    build:
+      context: ./product_service
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./product_service:/code  # Sync local development directory with the container
     depends_on:
         - postgres_db
         - broker
